@@ -6,6 +6,8 @@ import math
 
 p = 11
 
+# TODO: make a class for field element
+
 class Field:
     def __init__(self, p) -> None:
         self.p = p
@@ -30,7 +32,7 @@ class FunctionEvaluation:
     def evaluate(self, r: list[int]) -> int:
         n = len(self.evals)
         log = int(math.log(n, 2))
-        x = [] # this is multilinear Langrange basis polynomials with interpolating set {0,1}^n
+        lagrange_basis_evals = [] # this is multilinear Langrange basis polynomials with interpolating set {0,1}^n
         for i in range(n):
             prod = 1
             # take binary representation
@@ -44,7 +46,7 @@ class FunctionEvaluation:
                     prod *= r[i]
                 else:
                     prod *= 1 - r[i]
-            x.append(prod)
+            lagrange_basis_evals.append(prod)
         # now calculate sum
         sum = 0
         for i in range(n):
