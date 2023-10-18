@@ -1,5 +1,8 @@
 """
 Exercise 3.4, p. 32
+Given evaluations of a function in {0, 1}^{2^n}, 
+calculate f(input) for input in F^n (evaluation of multilinear extension),
+where F is a field of prime order
 """
 
 import math
