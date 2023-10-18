@@ -1,5 +1,5 @@
 import unittest
-from ex3_4 import Field, FunctionEvaluation
+from ex3_4 import Field, MultilinearExtension
 
 class TestField(unittest.TestCase):
 
@@ -17,12 +17,33 @@ class TestField(unittest.TestCase):
         result = field.add(a, b)
         self.assertEqual(6, result)
 
-class TestLagrangeBasisEvals(unittest.TestCase):
-    def test_lagrange_basis_evals(self):
+class TestMultilinearExtension(unittest.TestCase):
+
+    #TODO: test with more test cases + test final result
+    def test_slow_evaluation_1(self):
+
         f_evals = [3, 4, 1, 2]
-        test = FunctionEvaluation(f_evals, 11)
-        lagrange_basis_evals = test.find_lagnrange_basis_evals([2,4])
+        prime = 11
+        multilinear_extension = MultilinearExtension(f_evals, prime)
+
+        input = [2, 4]
+        lagrange_basis_evals = multilinear_extension.slow_find_lagnrange_basis_evals(input)
+        result = multilinear_extension.slow_evaluate(input)
+
         self.assertEqual(lagrange_basis_evals, [3, 7, 5, 8])
+        self.assertEqual(result, 3)
+
+    def test_slow_evaluation_2(self):
+
+        f_evals = [1, 5, 2, 6, 3, 7, 4, 8, 12, 10, 2, 6, 8, 11, 4, 5]
+        prime = 17
+        multilinear_extension = MultilinearExtension(f_evals, prime)
+
+        input = [2,4,6,8]
+        result = multilinear_extension.slow_evaluate(input)
+
+        self.assertEqual(result, 13)
+
 
 if __name__ == '__main__':
     unittest.main()
