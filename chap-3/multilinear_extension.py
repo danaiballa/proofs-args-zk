@@ -9,10 +9,17 @@ class Field:
         self.p = p
     
     def add(self, a: int, b: int) -> int:
+        """
+        Add two elements mod p.
+        """
         return (a % self.p + b % self.p) % self.p
     
     def mult(self, a: int, b: int) -> int:
+        """
+        Multiply two elements mod p.
+        """
         return ((a % self.p) * (b % self.p)) % self.p
+    
 
 class MultilinearExtension:
 
@@ -25,19 +32,17 @@ class MultilinearExtension:
             self.log = log
         else:
             raise ValueError #TODO: fix the error
-            
-    def slow_evaluate(self, input: list[int]) -> int:
-        lagrange_basis_evals = self.slow_find_lagnrange_basis_evals(input)
-        # now calculate sum
+ 
+    def evaluate(self, lagrange_basis_evals: list[int]) -> int:
         sum = 0
         n = len(self.f_evals)
         for i in range(n):
             sum = self.field.add(sum, self.field.mult(self.f_evals[i], lagrange_basis_evals[i]))
         return sum
-    
-    def slow_find_lagnrange_basis_evals(self, input: list[int]) -> list[int]:
+
+    def slow_find_lagrange_basis_evals(self, input: list[int]) -> list[int]:
         n = len(self.f_evals)
-        lagrange_basis_evals = [] # this is multilinear Langrange basis polynomials with interpolating set {0,1}^n
+        lagrange_basis_evals = []
         for i in range(n):
             prod = 1
             # take binary representation
@@ -52,9 +57,23 @@ class MultilinearExtension:
             lagrange_basis_evals.append(prod)
         return lagrange_basis_evals
     
+    def fast_find_lagrange_basis_evals(self, input: list[int]) -> list[int]:
+        n = len(input)
+        if n == 0: return []
+        lagrange_basis_evals = [self.field.add(1, (-1)*input[0]), input[0]]
+        for i in range(1, n):
+            temp = []
+            for eval in lagrange_basis_evals:
+                temp.append(self.field.mult(eval, 1-input[i]))
+                temp.append(self.field.mult(eval, input[i]))
+            lagrange_basis_evals = temp
+        return lagrange_basis_evals
+                
     def __binarize(self, num: int)-> str:
         """
-        Binary representation of a number with leading 0's
+        Binary representation of a number, with leading 0's
+
+        Example: self.log = 4, num = 3: 0010
         """
         b = bin(num)[2:] # binary starts with "0b" so we cut that
         # Add missing 0's and return
