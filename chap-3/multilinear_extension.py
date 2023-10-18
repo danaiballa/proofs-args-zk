@@ -73,7 +73,7 @@ class MultilinearExtension:
         """
         Binary representation of a number, with leading 0's
 
-        Example: self.log = 4, num = 3: 0010
+        Example: self.log = 4, num = 3: '0010'
         """
         b = bin(num)[2:] # binary starts with "0b" so we cut that
         # Add missing 0's and return
