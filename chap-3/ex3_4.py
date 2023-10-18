@@ -25,38 +25,42 @@ class FunctionEvaluation:
         log = int(math.log(len(evals), 2))
         if (2**log == len(evals)):
             self.evals = evals
+            # TODO: find a better name than 'log'
+            self.log = log
         else:
             raise ValueError #TODO: fix the error
-        
-
-    def evaluate(self, r: list[int]) -> int:
+            
+    def slow_evaluate(self, input: list[int]) -> int:
         n = len(self.evals)
-        log = int(math.log(n, 2))
         lagrange_basis_evals = [] # this is multilinear Langrange basis polynomials with interpolating set {0,1}^n
+        #TODO: perhaps make an array of all the basis. Not the best, since we are using more space, but more readable
         for i in range(n):
             prod = 1
             # take binary representation
-            b = bin(i)
-            # deal with missing zeroes in the beginning of string
-            for j in range(log-len(b)):
-                prod *= 1 - r[i]
+            basis_elem = self.__binarize(i)
             # calculate the rest
-            for bit in b:
+            for bit in basis_elem:
                 if bit == "1":
-                    prod *= r[i]
+                    prod = self.field.mult(prod, self.evals[i])
                 else:
-                    prod *= 1 - r[i]
+                    prod = self.field.mult(prod, 1-self.evals[i])
             lagrange_basis_evals.append(prod)
         # now calculate sum
         sum = 0
         for i in range(n):
-            sum += self.evals[i]*x[i]
-        return sum % self.p #TODO: make this more efficient by using the class
+            sum = self.field.add(sum, self.field.mult(self.evals[i], lagrange_basis_evals[i]))
+        return sum
+    
+    def __binarize(self, num: int)-> str:
+        b = bin(num)
+        # Add missing 0's and return
+        return "0"*(self.log - len(b)) + b
     
 if __name__ == "__main__":
     evals = [3, 4, 1, 2]
     test = FunctionEvaluation(evals, 11)
-    test.evaluate([2, 4])                               
+    evaluation = test.slow_evaluate([2, 4])   
+    print(evaluation)                       
         
 
 
