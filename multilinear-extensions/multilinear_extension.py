@@ -82,11 +82,3 @@ class MultilinearExtension:
         # Add missing 0's and return
         return "0"*(self.log - len(b)) + b
     
-                    
-        
-
-
-
-
-    
-    
