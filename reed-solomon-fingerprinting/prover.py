@@ -8,7 +8,7 @@ class Prover:
 
     In reality, Prover would pick the prime as well.
     Here we hardcode the prime to 683, so we support sequences of length <= 26
-    (else the probability of verifying a wrong proof becomes > 0.03)
+    (else the probability of a wrong proof passing verification becomes > 0.03)
     '''
 
     def __init__(self, sequence: list[int]) -> None:
