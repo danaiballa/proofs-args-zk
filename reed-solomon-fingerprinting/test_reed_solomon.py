@@ -10,7 +10,7 @@ class TestReedSolomon(unittest.TestCase):
         bob = Verifier(sequence)
 
         (r, proof) = alice.prove()
-        result = bob.verify(r, proof, alice.prime)
+        result = bob.verify(r, proof)
         self.assertTrue(result)
         
 
@@ -23,7 +23,7 @@ class TestReedSolomon(unittest.TestCase):
         bob = Verifier(sequence_2)
 
         (r, proof) = alice.prove()
-        result = bob.verify(r, proof, alice.prime)
+        result = bob.verify(r, proof)
         self.assertFalse(result)
 
 

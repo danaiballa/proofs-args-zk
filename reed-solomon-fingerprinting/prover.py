@@ -1,4 +1,5 @@
 import random
+import math
 
 class Prover:
     '''
@@ -7,12 +8,12 @@ class Prover:
 
     In reality, Prover would pick the prime as well.
     Here we hardcode the prime to 683, so we support sequences of length <= 26
-    
+    (else the probability of verifying a wrong proof becomes > 0.03)
     '''
 
     def __init__(self, sequence: list[int]) -> None:
         prime = 683
-        if len(sequence) > 26 or max(sequence) > prime:
+        if len(sequence) > math.sqrt(prime):
             raise ValueError
         self.sequence = sequence
         self.prime = prime
